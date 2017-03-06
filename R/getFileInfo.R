@@ -23,12 +23,17 @@
 #' @seealso \code{\link{checkTimePeriod}}
 getFileInfo <- function(path='.', recursive=TRUE) {
 
+    # handle any globbing patterns
+    path = Sys.glob(path)
+
     # Sanity checks
-    assert_that(is.dir(path))
-    assert_that(is.readable(path))
+    for (path_ in path) {
+      assert_that(is.dir(path_))
+      assert_that(is.readable(path_))
+    }
     assert_that(is.flag(recursive))
 
-    # Pull all nc files from the directory
+    # Pull all nc files from the directory/directories
     fullFile <- list.files(path=path, pattern='nc$',
                            full.names=TRUE, recursive=recursive)
 
